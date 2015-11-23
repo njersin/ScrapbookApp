@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ScrapbookApp</string>
+
+    <string name="note_text_title">NOTE: </string>
+    <string name="note_hashtag_title">#</string>
+    <string name="new_note">Create</string>
+    <string name="delete_note">Delete</string>
+    <string name="search_note">Search</string>
+    <string name="save_note">Save</string>
+    <string name="title_format">Notes (%1$s)</string>
+    <string name="action_settings">Settings</string>
+</resources>
