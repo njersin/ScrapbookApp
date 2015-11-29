@@ -29,12 +29,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/note_hashtag_title"
+            android:text="@string/hashtag_title"
             style="?android:listSeparatorTextViewStyle"/>
 
         <EditText
             android:id="@+id/note_hashtag"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>

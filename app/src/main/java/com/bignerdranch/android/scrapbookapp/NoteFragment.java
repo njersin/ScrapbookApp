@@ -20,7 +20,7 @@ public class NoteFragment extends Fragment {
 
     private static final String ARG_NOTE_ID = "note_id";
 
-    private Note mNote;
+    private Item mNote;
     private EditText mNoteField;
     private EditText mHashtagField;
     private Button mDateButton;
@@ -38,9 +38,8 @@ public class NoteFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        UUID crimeID = (UUID) getArguments().getSerializable(ARG_NOTE_ID);
-        mNote = NoteLab.get(getActivity()).getNote(crimeID);
+        UUID noteID = (UUID) getArguments().getSerializable(ARG_NOTE_ID);
+        mNote = ItemLab.get(getActivity()).getItem(noteID);
     }
 
     @Override
@@ -104,11 +103,11 @@ public class NoteFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_delete_note:
-                NoteLab.get(getActivity()).deleteNote(mNote);
+                ItemLab.get(getActivity()).deleteItem(mNote);
                 getActivity().finish();
                 return true;
             case R.id.menu_item_save_note:
-                NoteLab.get(getActivity()).updateNote(mNote);
+                ItemLab.get(getActivity()).updateItem(mNote);
                 getActivity().finish();
                 return true;
             default:
@@ -124,6 +123,6 @@ public class NoteFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        NoteLab.get(getActivity()).updateNote(mNote);
+        ItemLab.get(getActivity()).updateItem(mNote);
     }
 }

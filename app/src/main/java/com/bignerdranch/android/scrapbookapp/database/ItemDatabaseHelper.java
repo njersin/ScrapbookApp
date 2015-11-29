@@ -4,25 +4,26 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.bignerdranch.android.scrapbookapp.database.NoteDbSchema.NoteTable;
+import com.bignerdranch.android.scrapbookapp.database.ItemDbSchema.ItemTable;
 
-public class NoteDatabaseHelper extends SQLiteOpenHelper {
+public class ItemDatabaseHelper extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;
-    private static final String DATABASE_NAME = "noteDatabase.db";
+    private static final String DATABASE_NAME = "itemDatabase.db";
 
-    public NoteDatabaseHelper(Context context) {
+    public ItemDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + NoteTable.NAME + "(" +
+        db.execSQL("create table " + ItemTable.NAME + "(" +
                 " _uniqueid integer primary key autoincrement, " +
-                NoteTable.Cols.UUID + ", " +
-                NoteTable.Cols.NOTE + ", " +
-                NoteTable.Cols.DATE + ", " +
-                NoteTable.Cols.HASHTAG +
+                ItemTable.Cols.UUID + ", " +
+                ItemTable.Cols.NOTE + ", " +
+                ItemTable.Cols.DATE + ", " +
+                ItemTable.Cols.HASHTAG + ", " +
+                ItemTable.Cols.TYPE +
                 ")"
             );
     }
