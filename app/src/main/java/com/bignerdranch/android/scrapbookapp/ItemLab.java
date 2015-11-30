@@ -64,6 +64,22 @@ public class ItemLab {
         return items;
     }
 
+    public List<Item> searchItems(String query) {
+        List<Item> items = new ArrayList<>();
+        ItemCursorWrapper cursor = queryItems(ItemTable.Cols.HASHTAG + " = ?", new String[]{query});
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                items.add(cursor.getItem());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return items;
+    }
+
     public Item getItem(UUID id) {
         ItemCursorWrapper cursor = queryItems(ItemTable.Cols.UUID + " = ?", new String[]{id.toString()});
 
@@ -109,4 +125,5 @@ public class ItemLab {
         );
         return new ItemCursorWrapper(cursor);
     }
+
 }

@@ -7,6 +7,8 @@
     <string name="new_picture">Picture</string>
     <string name="delete_item">Delete</string>
     <string name="search_note">Search</string>
+    <string name="search_label">Item</string>
+    <string name="search_hint">Search items</string>
     <string name="save_item">Save</string>
     <string name="title_format">Items (%1$s)</string>
     <string name="action_settings">Settings</string>

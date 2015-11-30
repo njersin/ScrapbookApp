@@ -1,5 +1,7 @@
 package com.bignerdranch.android.scrapbookapp;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,16 +26,33 @@ public class ItemListFragment extends Fragment{
 
     private RecyclerView mItemRecyclerView;
     private ItemAdapter mAdapter;
+    private String mSearchQuery;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        mSearchQuery = "";
+        // Get the search intent, verify the action and get the query
+        handleSearchIntent(getActivity().getIntent());
+    }
+
+    private void handleSearchIntent(Intent intent) {
+       if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            mSearchQuery = query;
+//            processSearchQuery(query);
+        }
+    }
+
+    private void processSearchQuery(String query) {
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_note_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
         mItemRecyclerView = (RecyclerView)view.findViewById(R.id.item_recycler_view);
         mItemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -114,13 +134,19 @@ public class ItemListFragment extends Fragment{
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_note_list, menu);
+        inflater.inflate(R.menu.fragment_item_list, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_item_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));  // Assumes current activity is the searchable activity
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
         Intent intent;
-        switch (item.getItemId()) {
+        switch (menuItem.getItemId()) {
             case R.id.menu_item_new_note:
                 Note note = new Note();
                 ItemLab.get(getActivity()).addItem(note);
@@ -133,10 +159,11 @@ public class ItemListFragment extends Fragment{
                 intent = ItemPagerActivity.newIntent(getActivity(), picture.getID());
                 startActivity(intent);
                 return true;
-            case R.id.menu_item_search_note:
+            case R.id.menu_item_search:
+                getActivity().onSearchRequested();
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(menuItem);
         }
     }
 
@@ -148,7 +175,14 @@ public class ItemListFragment extends Fragment{
 
     private void updateUI() {
         ItemLab itemLab = ItemLab.get(getActivity());
-        List<Item> items = itemLab.getItems();
+        List<Item> items;
+
+        if (mSearchQuery.isEmpty()) {
+            items  = itemLab.getItems();
+        } else {
+            items = itemLab.searchItems(mSearchQuery);
+            mSearchQuery = "";
+        }
 
         if (mAdapter == null) {
             mAdapter = new ItemAdapter(items);
