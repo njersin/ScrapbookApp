@@ -21,8 +21,7 @@
         <activity
             android:name=".ItemPagerActivity"
             android:parentActivityName=".ItemListActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:label="@string/app_name">
         </activity>
 
     </application>

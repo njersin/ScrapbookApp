@@ -109,7 +109,7 @@ public class ItemLab {
         values.put(ItemTable.Cols.NOTE, item.getMemoText());
         values.put(ItemTable.Cols.HASHTAG, item.getHashtag());
         values.put(ItemTable.Cols.TYPE, item.getItemType());
-        values.put(ItemTable.Cols.DATE, item.getDate().toString());
+        values.put(ItemTable.Cols.DATE, item.getDate().getTime());
         return values;
     }
 
@@ -121,7 +121,7 @@ public class ItemLab {
                 whereArgs,
                 null, //groupBy
                 null, //having
-                null  //orderBy
+                ItemTable.Cols.DATE  + " DESC"//orderBy
         );
         return new ItemCursorWrapper(cursor);
     }
