@@ -34,6 +34,7 @@ public class ItemListFragment extends Fragment{
         setHasOptionsMenu(true);
 
         mSearchQuery = "";
+
         // Get the search intent, verify the action and get the query
         handleSearchIntent(getActivity().getIntent());
     }
@@ -42,12 +43,7 @@ public class ItemListFragment extends Fragment{
        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             mSearchQuery = query;
-//            processSearchQuery(query);
         }
-    }
-
-    private void processSearchQuery(String query) {
-
     }
 
     @Override
@@ -139,6 +135,7 @@ public class ItemListFragment extends Fragment{
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.menu_item_search).getActionView();
+        searchView.setSubmitButtonEnabled(true);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));  // Assumes current activity is the searchable activity
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
     }
@@ -175,13 +172,12 @@ public class ItemListFragment extends Fragment{
 
     private void updateUI() {
         ItemLab itemLab = ItemLab.get(getActivity());
-        List<Item> items;
+        List<Item> items = null;
 
         if (mSearchQuery.isEmpty()) {
-            items  = itemLab.getItems();
+            items = itemLab.getItems();
         } else {
             items = itemLab.searchItems(mSearchQuery);
-            mSearchQuery = "";
         }
 
         if (mAdapter == null) {
@@ -192,12 +188,12 @@ public class ItemListFragment extends Fragment{
             mAdapter.notifyDataSetChanged();
         }
 
-        updateTitle();
+        int itemsCount = mAdapter.getItemCount();
+        updateTitle(itemsCount);
     }
 
-    public void updateTitle() {
+    public void updateTitle(int itemsCount) {
         ItemLab itemLab = ItemLab.get(getActivity());
-        int itemsCount = itemLab.getItems().size();
         String title = getString(R.string.title_format, itemsCount);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
